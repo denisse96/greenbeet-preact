@@ -8,7 +8,7 @@
   "source": "components/hello-world/index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "build": "preact build --no-prerender --clean --template src/index.ejs --service-worker false",
+    "build": "preact build --no-prerender --template src/index.ejs",
     "serve": "preact serve",
     "dev": "preact watch --template src/index.ejs",
     "dist": "microbundle --entry src/components/hello-world/index.js"
@@ -17,22 +17,25 @@
   "author": "Zouhir <zouhir@zouhir.org>",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.5.0",
+    "eslint": "^7.15.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^21.2.1",
-    "microbundle": "^0.6.0",
-    "node-sass": "^4.5.3",
-    "preact-cli": "^2.0.2",
-    "preact-render-to-string": "^3.7.0",
+    "jest": "^26.6.3",
+    "microbundle": "^0.12.4",
+    "node-sass": "^5.0.0",
+    "preact-cli": "^3.0.5",
+    "preact-cli-tailwind": "^2.0.0",
     "preact-widget-scripts": "^0.6.0",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^10.1.0"
   },
   "dependencies": {
-    "preact": "^8.5.2",
+    "axios": "^0.21.0",
+    "preact": "^10.5.7",
     "preact-compat": "^3.17.0",
     "preact-habitat": "^3.1.0",
-    "preact-render-to-string": "^4.1.0",
-    "preact-router": "^2.5.7"
+    "preact-render-to-string": "^5.1.12",
+    "preact-router": "^3.2.1",
+    "react-query": "^2.26.4",
+    "tailwindcss": "^2.0.2"
   },
   "jest": {
     "verbose": true,
