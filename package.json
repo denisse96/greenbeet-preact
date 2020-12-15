@@ -17,7 +17,6 @@
   "author": "Zouhir <zouhir@zouhir.org>",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^10.1.0",
     "eslint": "^7.15.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
@@ -29,6 +28,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "classnames": "^2.2.6",
     "mini.css": "^3.0.1",
     "preact": "^10.5.7",
     "preact-compat": "^3.17.0",
