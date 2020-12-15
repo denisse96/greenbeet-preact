@@ -6,6 +6,7 @@ import 'mini.css/dist/mini-default.css';
 import './style.scss';
 import { openPopupWidget } from 'react-calendly';
 
+
 export default class App extends Component {
 	render(props) {
 		return <Header {...props} />;
@@ -66,14 +67,19 @@ const Header = ({ userId = '' }) => {
 		}
 	});
 	return (
+		<>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'></link>
 		<div>
 			<div class="container">
 				<div className="row">
 					<div class="card col-sm-3 shadowed">
-						<div class="section double-padded" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
+						<div  class="section double-padded" style={{ backgroundColor: '#136966' }}>
+							<p style={{color:"white" , fontFamily: 'Montserrat', fontWeight:'bold'}}>
 							Entrenamiento personal
+							</p>
+							
 						</div>
-						<div class="section row" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
+						<div class="section row" style={{ backgroundColor: '#136966', fontFamily: 'Montserrat' }}>
 							<div class="inline-flex rounded-md">
 								<div style={{ paddingBottom: '0.5em' }}>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
@@ -85,7 +91,7 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 										/>
-										<label for="online-entrenamiento">Online</label>
+										<label style={{color:"white", fontFamily: 'Montserrat'}} for="online-entrenamiento">Online</label>
 									</div>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
 										<input
@@ -96,7 +102,7 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 										/>
-										<label for="presencial-entrenamiento">Presencial</label>
+										<label  style={{color:"white", fontFamily: 'Montserrat'}}for="presencial-entrenamiento">Presencial</label>
 									</div>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
 										<input
@@ -106,14 +112,15 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 											onClick={() => setEntrenamiento(radioUrls.entrenamiento.domicilio)}
+										
 										/>
-										<label for="domicilio-entrenamiento">Domicilio</label>
+										<label style={{color:"white", fontFamily: 'Montserrat'}}	for="domicilio-entrenamiento">Domicilio</label>
 									</div>
 								</div>
 								<button
 									onClick={() => calendlyClick(entrenamiento)}
 									class="tertiary"
-									style={{ background: 'rgb(0,100,0)' }}
+									style={{ background: '#a8f800' }}
 									disabled={!entrenamiento}
 								>
 									Agendar cita
@@ -122,10 +129,13 @@ const Header = ({ userId = '' }) => {
 						</div>
 					</div>
 					<div class="card col-sm-3 shadowed">
-						<div class="section double-padded" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
+						<div class="section double-padded" style={{ backgroundColor: '#136966' }}>
+							<p style={{color:"white", fontFamily: 'Montserrat',fontWeight:'bold'}}>
 							Consulta de nutrición
+							</p>
+					
 						</div>
-						<div class="section row" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
+						<div class="section row" style={{ backgroundColor: '#136966' }}>
 							<div class="inline-flex rounded-md">
 								<div style={{ paddingBottom: '0.5em' }}>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
@@ -137,7 +147,7 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 										/>
-										<label for="online-nutricion">Online</label>
+										<label style={{color:"white", fontFamily: 'Montserrat'}} for="online-nutricion">Online</label>
 									</div>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
 										<input
@@ -148,7 +158,7 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 										/>
-										<label for="presencial-nutricion">Presencial</label>
+										<label style={{color:"white", fontFamily: 'Montserrat'}} for="presencial-nutricion">Presencial</label>
 									</div>
 									<div class="col-sm-12 col-md" style={{ display: 'flex', alignItems: 'center' }}>
 										<input
@@ -159,13 +169,13 @@ const Header = ({ userId = '' }) => {
 											autocomplete="off"
 											class="doc"
 										/>
-										<label for="domicilio-nutricion">Domicilio</label>
+										<label style={{color:"white", fontFamily: 'Montserrat'}} for="domicilio-nutricion">Domicilio</label>
 									</div>
 								</div>
 								<button
 									onClick={() => calendlyClick(nutricion)}
 									class="tertiary"
-									style={{ background: 'rgb(0,100,0)' }}
+									style={{ background: '#a8f800' }}
 									disabled={!nutricion}
 								>
 									Agendar cita
@@ -176,5 +186,6 @@ const Header = ({ userId = '' }) => {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 };
