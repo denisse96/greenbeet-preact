@@ -39,18 +39,19 @@ const Header = ({ userId = '' }) => {
 	const calendlyClick = (url) => openPopupWidget({ url });
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
+	let id = userId || (window.ShopifyAnalytics && window.ShopifyAnalytics.meta.page.customerId);
 
 	const { data = {}, isSuccess } = useQuery(
 		[
 			'user.data',
 			{
-				id: userId
+				id: id
 			}
 		],
 		getUserData
 	);
 
-	if (!userId) {
+	if (!id) {
 		return '';
 	}
 	const { urls = [] } = data;
