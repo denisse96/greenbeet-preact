@@ -31,12 +31,13 @@ const getUserData = async (_, { id }) => {
 
 const styles = {
 	greenBackground: { backgroundColor: '#136966', color: 'white', fontStyle: 'normal', fontWeight: 'normal' },
-	button: { backgroundColor: '#a8f800', fontSize: '0.9em', textTransform: 'uppercase' },
+	button: { backgroundColor: '#a8f800', fontSize: '0.9em' },
 	label: { fontStyle: 'normal', fontWeight: 'normal' }
 };
 
 const Header = ({ userId = '' }) => {
 	const calendlyClick = (url) => openPopupWidget({ url });
+	const tabOpen =(url) => window.open(url, '_blank');
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
 
@@ -50,9 +51,9 @@ const Header = ({ userId = '' }) => {
 		getUserData
 	);
 
-	if (!userId) {
-		return '';
-	}
+	//if (!userId) {
+	//	return '';
+	//}
 	const { urls = [] } = data;
 
 	const radioUrls = {
@@ -91,7 +92,7 @@ const Header = ({ userId = '' }) => {
 					<div class="row">
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>Entrenamiento personal</h4>
+								<h4 style={{ color: 'white', textTransform: 'none' }}>ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
@@ -144,17 +145,19 @@ const Header = ({ userId = '' }) => {
 									<button
 										class="rounded align-self-start"
 										style={styles.button}
-										onClick={() => calendlyClick(entrenamiento)}
-										disabled={!entrenamiento}
+										onClick={() =>{ entrenamiento? 
+											calendlyClick(entrenamiento): 
+											tabOpen('https://greenbeet.mx/collections')	}}
+										
 									>
-										Agendar cita
+										{entrenamiento ? 'Agendar Cita' : 'COMPRAR CITA ENTRENAMIENTO'}
 									</button>
 								</div>
 							</div>
 						</div>
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>Consulta de nutrición</h4>
+								<h4 style={{ color: 'white', textTransform: 'none' }}>CONSULTA DE NUTRICIÓN</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
@@ -173,7 +176,7 @@ const Header = ({ userId = '' }) => {
 										</div>
 										<div class="flex align-center">
 											<input
-												onClick={() => setNutricion(radioUrls.nutricion.presencial)}
+												onClick={() => setNutricion(radioUrls.nutricion.presencial) }
 												name="nutricion"
 												type="radio"
 												id="presencial-nutricion"
@@ -198,11 +201,12 @@ const Header = ({ userId = '' }) => {
 									</div>
 									<button
 										style={styles.button}
-										onClick={() => calendlyClick(nutricion)}
-										disabled={!nutricion}
-										class="rounded align-self-start"
+										onClick={() => { nutricion? calendlyClick(nutricion):
+											tabOpen('https://greenbeet.mx/collections')} }
+										
+										class="rounded align-self-start"	
 									>
-										Agendar cita
+												{nutricion ? 'AGENDAR CITA' : 'COMPRAR CITA NUTRICIÓN'}
 									</button>
 								</div>
 							</div>
