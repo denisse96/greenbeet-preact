@@ -109,6 +109,10 @@ button[disabled] {
   align-items: center;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .align-self-start {
   align-self: start;
 }

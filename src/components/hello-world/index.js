@@ -1,31 +1,22 @@
 import { Component } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import Axios from 'axios';
 import { useQuery } from 'react-query';
 import { openPopupWidget } from 'react-calendly';
+
+// perfectly splendid!
 export default class App extends Component {
 	render(props) {
 		return <Header {...props} />;
 	}
 }
 
-window.addEventListener(
-	'message',
-	(event) => {
-		// Do we trust the sender of this message?  (might be
-		// different from what we originally opened, for example).
-		//	if (event.origin !== 'www.greebe') return;
-		console.log(event.data);
-		//setComprado(event.data);
-
-		// event.source is popup
-		// event.data is "hi there yourself!  the secret response is: rheeeeet!"
-	},
-	false
-);
-
 const getUserData = async (_, { id }) => {
-	const userdata = await Axios.post(`https://greenbeet.vercel.app/api/user/${id}`);
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `https://greenbeet.vercel.app/api/user/${id}`
+			: `http://localhost:8000/api/user/${id}`;
+	const userdata = await Axios.post(url);
 	return userdata.data;
 };
 
@@ -41,7 +32,7 @@ const Header = ({ userId = '' }) => {
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
 
-	const { data = {}, isSuccess } = useQuery(
+	const { data = {}, refetch } = useQuery(
 		[
 			'user.data',
 			{
@@ -51,9 +42,6 @@ const Header = ({ userId = '' }) => {
 		getUserData
 	);
 
-	//if (!userId) {
-	//	return '';
-	//}
 	const { urls = [] } = data;
 
 	const radioUrls = {
@@ -68,6 +56,11 @@ const Header = ({ userId = '' }) => {
 			domicilio: ''
 		}
 	};
+
+	const [ creditos_entrenamiento, creditos_nutricion ] = urls.reduce(
+		(acc, curr) => [ acc[0] + curr.sesiones_restantes_entrenamiento, acc[1] + curr.sesiones_restantes_nutricion ],
+		[ 0, 0 ]
+	);
 
 	urls.forEach((urlObject) => {
 		if (
@@ -85,17 +78,38 @@ const Header = ({ userId = '' }) => {
 			radioUrls.nutricion[urlObject.localizacion] = urlObject.url;
 		}
 	});
+
+	useEffect(() => {
+		const host = window.location.origin || '';
+
+		function handleMessage(event) {
+			if (event.origin !== host || !userId) return;
+			if (event.data === 'refetch') refetch();
+		}
+
+		const bc = new BroadcastChannel('refetch_channel');
+		bc.onmessage = handleMessage;
+		bc.postMessage('refetch');
+
+		return () => {
+			bc.close();
+		};
+	}, []);
+
 	return (
 		<div>
 			<div>
 				<div>
-					<div class="row">
+					<div class="row justify-center">
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
 								<h4 style={{ color: 'white', textTransform: 'none' }}>ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
+									{userId && (
+										<div class="bottom-double-padded">{creditos_entrenamiento} disponibles</div>
+									)}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -145,12 +159,19 @@ const Header = ({ userId = '' }) => {
 									<button
 										class="rounded align-self-start"
 										style={styles.button}
-										onClick={() =>{ entrenamiento? 
-											calendlyClick(entrenamiento): 
-											tabOpen('https://greenbeet.mx/collections')	}}
-										
+										onClick={() => {
+											entrenamiento
+												? calendlyClick(entrenamiento)
+												: tabOpen('https://greenbeet.mx/collections');
+										}}
 									>
-										{entrenamiento ? 'Agendar Cita' : 'COMPRAR CITA ENTRENAMIENTO'}
+										{entrenamiento ? (
+											'Agendar Cita'
+										) : (
+											<div>
+												COMPRAR SESIÓN<br />DE ENTRENAMIENTO
+											</div>
+										)}
 									</button>
 								</div>
 							</div>
@@ -161,6 +182,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
+									{userId && <div class="bottom-double-padded">{creditos_nutricion} disponibles</div>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -201,12 +223,20 @@ const Header = ({ userId = '' }) => {
 									</div>
 									<button
 										style={styles.button}
-										onClick={() => { nutricion? calendlyClick(nutricion):
-											tabOpen('https://greenbeet.mx/collections')} }
-										
-										class="rounded align-self-start"	
+										onClick={() => {
+											nutricion
+												? calendlyClick(nutricion)
+												: tabOpen('https://greenbeet.mx/collections');
+										}}
+										class="rounded align-self-start"
 									>
-												{nutricion ? 'AGENDAR CITA' : 'COMPRAR CITA NUTRICIÓN'}
+										{nutricion ? (
+											'AGENDAR CITA'
+										) : (
+											<div>
+												COMPRAR SESIÓN<br />DE NUTRICIÓN
+											</div>
+										)}
 									</button>
 								</div>
 							</div>
