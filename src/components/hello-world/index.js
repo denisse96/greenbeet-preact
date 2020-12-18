@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import Axios from 'axios';
 import { useQuery } from 'react-query';
 import { openPopupWidget } from 'react-calendly';
@@ -10,21 +10,6 @@ export default class App extends Component {
 		return <Header {...props} />;
 	}
 }
-
-window.addEventListener(
-	'message',
-	(event) => {
-		// Do we trust the sender of this message?  (might be
-		// different from what we originally opened, for example).
-		//	if (event.origin !== 'www.greebe') return;
-		console.log(event.data);
-		//setComprado(event.data);
-
-		// event.source is popup
-		// event.data is "hi there yourself!  the secret response is: rheeeeet!"
-	},
-	false
-);
 
 const getUserData = async (_, { id }) => {
 	const url =
@@ -46,9 +31,8 @@ const Header = ({ userId = '' }) => {
 	const tabOpen = (url) => window.open(url, '_blank');
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
-	console.log(userId);
 
-	const { data = {}, isSuccess } = useQuery(
+	const { data = {}, refetch } = useQuery(
 		[
 			'user.data',
 			{
@@ -58,9 +42,6 @@ const Header = ({ userId = '' }) => {
 		getUserData
 	);
 
-	//if (!userId) {
-	//	return '';
-	//}
 	const { urls = [] } = data;
 
 	const radioUrls = {
@@ -77,7 +58,7 @@ const Header = ({ userId = '' }) => {
 	};
 
 	const [ creditos_entrenamiento, creditos_nutricion ] = urls.reduce(
-		(acc, curr) => [ acc + curr.sesiones_restantes_entrenamiento, acc + curr.sesiones_restantes_nutricion ],
+		(acc, curr) => [ acc[0] + curr.sesiones_restantes_entrenamiento, acc[1] + curr.sesiones_restantes_nutricion ],
 		[ 0, 0 ]
 	);
 
@@ -97,6 +78,24 @@ const Header = ({ userId = '' }) => {
 			radioUrls.nutricion[urlObject.localizacion] = urlObject.url;
 		}
 	});
+
+	useEffect(() => {
+		const host = window.location.origin || '';
+
+		function handleMessage(event) {
+			if (event.origin !== host || !userId) return;
+			if (event.data === 'refetch') refetch();
+		}
+
+		const bc = new BroadcastChannel('refetch_channel');
+		bc.onmessage = handleMessage;
+		bc.postMessage('refetch');
+
+		return () => {
+			bc.close();
+		};
+	}, []);
+
 	return (
 		<div>
 			<div>
@@ -108,7 +107,9 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{userId && <h2>{creditos_entrenamiento} disponibles</h2>}
+									{userId && (
+										<div class="bottom-double-padded">{creditos_entrenamiento} disponibles</div>
+									)}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -181,7 +182,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{userId && <h2>{creditos_nutricion} disponibles</h2>}
+									{userId && <div class="bottom-double-padded">{creditos_nutricion} disponibles</div>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
