@@ -3,6 +3,8 @@ import { useState } from 'preact/hooks';
 import Axios from 'axios';
 import { useQuery } from 'react-query';
 import { openPopupWidget } from 'react-calendly';
+
+// perfectly splendid!
 export default class App extends Component {
 	render(props) {
 		return <Header {...props} />;
@@ -99,14 +101,14 @@ const Header = ({ userId = '' }) => {
 		<div>
 			<div>
 				<div>
-					<div class="row">
+					<div class="row justify-center">
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
 								<h4 style={{ color: 'white', textTransform: 'none' }}>ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{userId && <h2>Tienes {urls.length} disponibles</h2>}
+									{userId && <h2>{creditos_entrenamiento} disponibles</h2>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -162,7 +164,13 @@ const Header = ({ userId = '' }) => {
 												: tabOpen('https://greenbeet.mx/collections');
 										}}
 									>
-										{entrenamiento ? 'Agendar Cita' : 'COMPRAR CITA ENTRENAMIENTO'}
+										{entrenamiento ? (
+											'Agendar Cita'
+										) : (
+											<div>
+												COMPRAR SESIÓN<br />DE ENTRENAMIENTO
+											</div>
+										)}
 									</button>
 								</div>
 							</div>
@@ -173,6 +181,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
+									{userId && <h2>{creditos_nutricion} disponibles</h2>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -220,7 +229,13 @@ const Header = ({ userId = '' }) => {
 										}}
 										class="rounded align-self-start"
 									>
-										{nutricion ? 'AGENDAR CITA' : 'COMPRAR CITA NUTRICIÓN'}
+										{nutricion ? (
+											'AGENDAR CITA'
+										) : (
+											<div>
+												COMPRAR SESIÓN<br />DE NUTRICIÓN
+											</div>
+										)}
 									</button>
 								</div>
 							</div>
