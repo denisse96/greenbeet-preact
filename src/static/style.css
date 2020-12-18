@@ -93,6 +93,12 @@ button[disabled] {
   flex-basis: 25%;
 }
 
+.col-sm-12,
+.row.cols-sm-12 > * {
+  max-width: 100%;
+  flex-basis: 100%;
+}
+
 .card-label {
   padding: calc(var(--universal-padding) / 2) var(--universal-padding);
 }
@@ -121,3 +127,30 @@ button.rounded {
   border-radius: 5rem !important;
   padding: 0.5em 1em;
 } 
+
+.color-white {
+  color: white;
+}
+
+.card-header.card-header { 
+  color: white ; 
+  text-transform: none; 
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 768px) { 
+  .col-md,
+  [class^="col-md-"],
+  [class^="col-md-offset-"],
+  .row[class*="cols-md-"] > * {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding: 0 calc(var(--universal-padding) / 2);
+  }
+
+  .col-md-3,
+  .row.cols-md-3 > * {
+    max-width: 25%;
+    flex-basis: 25%;
+  }
+}

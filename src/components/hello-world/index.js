@@ -102,9 +102,9 @@ const Header = ({ userId = '' }) => {
 			<div>
 				<div>
 					<div class="row justify-center">
-						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
+						<div style={styles.greenBackground} class="card col-sm-12 col-md-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>ENTRENAMIENTO PERSONAL</h4>
+								<h4 class="card-header">ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
@@ -175,9 +175,9 @@ const Header = ({ userId = '' }) => {
 								</div>
 							</div>
 						</div>
-						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
+						<div style={styles.greenBackground} class="card col-sm-12 col-md-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>CONSULTA DE NUTRICIÓN</h4>
+								<h4 class="card-header">CONSULTA DE NUTRICIÓN</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
