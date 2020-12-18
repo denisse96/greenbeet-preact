@@ -108,9 +108,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{userId && (
-										<div class="bottom-double-padded">{creditos_entrenamiento} disponibles</div>
-									)}
+									{id && <div class="bottom-double-padded">{creditos_entrenamiento} disponibles</div>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -183,7 +181,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{userId && <div class="bottom-double-padded">{creditos_nutricion} disponibles</div>}
+									{id && <div class="bottom-double-padded">{creditos_nutricion} disponibles</div>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
