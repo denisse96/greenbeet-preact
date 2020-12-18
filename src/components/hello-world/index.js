@@ -25,35 +25,40 @@ window.addEventListener(
 );
 
 const getUserData = async (_, { id }) => {
-	const userdata = await Axios.post(`https://greenbeet.vercel.app/api/user/${id}`);
+	const url =
+		process.env.NODE_ENV === 'production'
+			? `https://greenbeet.vercel.app/api/user/${id}`
+			: `http://localhost:8000/api/user/${id}`;
+	const userdata = await Axios.post(url);
 	return userdata.data;
 };
 
 const styles = {
 	greenBackground: { backgroundColor: '#136966', color: 'white', fontStyle: 'normal', fontWeight: 'normal' },
-	button: { backgroundColor: '#a8f800', fontSize: '0.9em', textTransform: 'uppercase' },
+	button: { backgroundColor: '#a8f800', fontSize: '0.9em' },
 	label: { fontStyle: 'normal', fontWeight: 'normal' }
 };
 
 const Header = ({ userId = '' }) => {
 	const calendlyClick = (url) => openPopupWidget({ url });
+	const tabOpen = (url) => window.open(url, '_blank');
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
-	let id = userId || (window.ShopifyAnalytics && window.ShopifyAnalytics.meta.page.customerId);
+	console.log(userId);
 
 	const { data = {}, isSuccess } = useQuery(
 		[
 			'user.data',
 			{
-				id: id
+				id: userId
 			}
 		],
 		getUserData
 	);
 
-	if (!id) {
-		return '';
-	}
+	//if (!userId) {
+	//	return '';
+	//}
 	const { urls = [] } = data;
 
 	const radioUrls = {
@@ -68,6 +73,11 @@ const Header = ({ userId = '' }) => {
 			domicilio: ''
 		}
 	};
+
+	const [ creditos_entrenamiento, creditos_nutricion ] = urls.reduce(
+		(acc, curr) => [ acc + curr.sesiones_restantes_entrenamiento, acc + curr.sesiones_restantes_nutricion ],
+		[ 0, 0 ]
+	);
 
 	urls.forEach((urlObject) => {
 		if (
@@ -92,10 +102,11 @@ const Header = ({ userId = '' }) => {
 					<div class="row">
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>Entrenamiento personal</h4>
+								<h4 style={{ color: 'white', textTransform: 'none' }}>ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
+									{userId && <h2>Tienes {urls.length} disponibles</h2>}
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -145,17 +156,20 @@ const Header = ({ userId = '' }) => {
 									<button
 										class="rounded align-self-start"
 										style={styles.button}
-										onClick={() => calendlyClick(entrenamiento)}
-										disabled={!entrenamiento}
+										onClick={() => {
+											entrenamiento
+												? calendlyClick(entrenamiento)
+												: tabOpen('https://greenbeet.mx/collections');
+										}}
 									>
-										Agendar cita
+										{entrenamiento ? 'Agendar Cita' : 'COMPRAR CITA ENTRENAMIENTO'}
 									</button>
 								</div>
 							</div>
 						</div>
 						<div style={styles.greenBackground} class="card col-sm-3 shadowed">
 							<div class="section double-padded">
-								<h4 style={{ color: 'white', textTransform: 'none' }}>Consulta de nutrición</h4>
+								<h4 style={{ color: 'white', textTransform: 'none' }}>CONSULTA DE NUTRICIÓN</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
@@ -199,11 +213,14 @@ const Header = ({ userId = '' }) => {
 									</div>
 									<button
 										style={styles.button}
-										onClick={() => calendlyClick(nutricion)}
-										disabled={!nutricion}
+										onClick={() => {
+											nutricion
+												? calendlyClick(nutricion)
+												: tabOpen('https://greenbeet.mx/collections');
+										}}
 										class="rounded align-self-start"
 									>
-										Agendar cita
+										{nutricion ? 'AGENDAR CITA' : 'COMPRAR CITA NUTRICIÓN'}
 									</button>
 								</div>
 							</div>
