@@ -28,15 +28,16 @@ const styles = {
 
 const Header = ({ userId = '' }) => {
 	const calendlyClick = (url) => openPopupWidget({ url });
-	const tabOpen =(url) => window.open(url, '_blank');
+	const tabOpen = (url) => window.open(url, '_blank');
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
+	let id = userId || (window.ShopifyAnalytics && window.ShopifyAnalytics.meta.page.customerId);
 
 	const { data = {}, refetch } = useQuery(
 		[
 			'user.data',
 			{
-				id: userId
+				id: id
 			}
 		],
 		getUserData
@@ -198,7 +199,7 @@ const Header = ({ userId = '' }) => {
 										</div>
 										<div class="flex align-center">
 											<input
-												onClick={() => setNutricion(radioUrls.nutricion.presencial) }
+												onClick={() => setNutricion(radioUrls.nutricion.presencial)}
 												name="nutricion"
 												type="radio"
 												id="presencial-nutricion"
