@@ -47,14 +47,13 @@ const Header = ({ userId = '' }) => {
 
 	const radioUrls = {
 		entrenamiento: {
-			online: '',
-			presencial: '',
-			domicilio: ''
+			online: {url:'', sesiones:0},
+			domicilio: {url:'', sesiones:0}
 		},
 		nutricion: {
-			online: '',
-			presencial: '',
-			domicilio: ''
+			online: {url:'', sesiones:0},
+			presencial: {url:'', sesiones:0},
+			domicilio: {url:'', sesiones:0}
 		}
 	};
 
@@ -66,20 +65,24 @@ const Header = ({ userId = '' }) => {
 	urls.forEach((urlObject) => {
 		if (
 			urlObject.sesiones_restantes_entrenamiento > 0 &&
-			urlObject.localizacion &&
-			!radioUrls.entrenamiento[urlObject.localizacion]
+			urlObject.localizacion //&&
+		//	!radioUrls.entrenamiento[urlObject.localizacion]
 		) {
-			radioUrls.entrenamiento[urlObject.localizacion] = urlObject.url;
+			radioUrls.entrenamiento[urlObject.localizacion].url = urlObject.url;
+			radioUrls.entrenamiento[urlObject.localizacion].sesiones += urlObject.sesiones_restantes_entrenamiento
+
 		}
 		if (
 			urlObject.sesiones_restantes_nutricion > 0 &&
-			urlObject.localizacion &&
-			!radioUrls.nutricion[urlObject.localizacion]
+			urlObject.localizacion// &&
+			//!radioUrls.nutricion[urlObject.localizacion]
 		) {
-			radioUrls.nutricion[urlObject.localizacion] = urlObject.url;
+			radioUrls.nutricion[urlObject.localizacion].url = urlObject.url;
+			radioUrls.nutricion[urlObject.localizacion].sesiones += urlObject.sesiones_restantes_nutricion;
 		}
 	});
 
+		console.log({radioUrls})
 	useEffect(() => {
 		const host = window.location.origin || '';
 
@@ -108,7 +111,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{id && <div class="bottom-double-padded">{creditos_entrenamiento} disponibles</div>}
+					
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -119,23 +122,7 @@ const Header = ({ userId = '' }) => {
 												autocomplete="off"
 											/>
 											<label class="card-label" style={styles.label} for="online-entrenamiento">
-												Online
-											</label>
-										</div>
-										<div class="flex align-center">
-											<input
-												onClick={() => setEntrenamiento(radioUrls.entrenamiento.presencial)}
-												name="tipo"
-												type="radio"
-												id="presencial-entrenamiento"
-												autocomplete="off"
-											/>
-											<label
-												class="card-label"
-												style={styles.label}
-												for="presencial-entrenamiento"
-											>
-												Presencial
+												Online {radioUrls.entrenamiento['online'].sesiones} disponibles
 											</label>
 										</div>
 										<div class="flex align-center">
@@ -151,7 +138,7 @@ const Header = ({ userId = '' }) => {
 												style={styles.label}
 												for="domicilio-entrenamiento"
 											>
-												Domicilio
+												Domicilio {radioUrls.entrenamiento['domicilio'].sesiones} disponibles
 											</label>
 										</div>
 									</div>
@@ -181,7 +168,7 @@ const Header = ({ userId = '' }) => {
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-									{id && <div class="bottom-double-padded">{creditos_nutricion} disponibles</div>}
+							
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
@@ -192,7 +179,7 @@ const Header = ({ userId = '' }) => {
 												autocomplete="off"
 											/>
 											<label class="card-label" style={styles.label} for="online-nutricion">
-												Online
+												Online {radioUrls.nutricion['online'].sesiones} disponibles
 											</label>
 										</div>
 										<div class="flex align-center">
@@ -204,7 +191,7 @@ const Header = ({ userId = '' }) => {
 												autocomplete="off"
 											/>
 											<label class="card-label" style={styles.label} for="presencial-nutricion">
-												Presencial
+												Presencial {radioUrls.nutricion['presencial'].sesiones} disponibles
 											</label>
 										</div>
 										<div class="flex align-center">
@@ -216,7 +203,7 @@ const Header = ({ userId = '' }) => {
 												autocomplete="off"
 											/>
 											<label class="card-label" style={styles.label} for="domicilio-nutricion">
-												Domicilio
+												Domicilio {radioUrls.nutricion['domicilio'].sesiones} disponibles
 											</label>
 										</div>
 									</div>
