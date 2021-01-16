@@ -13,9 +13,7 @@ export default class App extends Component {
 
 const getUserData = async (_, { id }) => {
 	const url =
-		process.env.NODE_ENV === 'production'
-			? `https://greenbeet.vercel.app/api/user/${id}`
-			: `http://localhost:8000/api/user/${id}`;
+		`https://greenbeet.vercel.app/api/user/${id}`;
 	const userdata = await Axios.post(url);
 	return userdata.data;
 };
@@ -32,6 +30,14 @@ const Header = ({ userId = '' }) => {
 	const [ nutricion, setNutricion ] = useState('');
 	const [ entrenamiento, setEntrenamiento ] = useState('');
 	let id = userId || (window.ShopifyAnalytics && window.ShopifyAnalytics.meta.page.customerId);
+	let collection_title =  window.collection_title || "entrenamiento"
+
+
+	let build_mode = "entrenamiento";
+
+	if(collection_title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes("nutricion")) {
+		build_mode = "nutricion";
+	}
 
 	const { data = {}, refetch } = useQuery(
 		[
@@ -56,6 +62,7 @@ const Header = ({ userId = '' }) => {
 			domicilio: {url:'', sesiones:0}
 		}
 	};
+	console.log(radioUrls);
 
 	const [ creditos_entrenamiento, creditos_nutricion ] = urls.reduce(
 		(acc, curr) => [ acc[0] + curr.sesiones_restantes_entrenamiento, acc[1] + curr.sesiones_restantes_nutricion ],
@@ -70,7 +77,6 @@ const Header = ({ userId = '' }) => {
 		) {
 			radioUrls.entrenamiento[urlObject.localizacion].url = urlObject.url;
 			radioUrls.entrenamiento[urlObject.localizacion].sesiones += urlObject.sesiones_restantes_entrenamiento
-
 		}
 		if (
 			urlObject.sesiones_restantes_nutricion > 0 &&
@@ -81,8 +87,6 @@ const Header = ({ userId = '' }) => {
 			radioUrls.nutricion[urlObject.localizacion].sesiones += urlObject.sesiones_restantes_nutricion;
 		}
 	});
-
-		console.log({radioUrls})
 	useEffect(() => {
 		const host = window.location.origin || '';
 
@@ -105,17 +109,18 @@ const Header = ({ userId = '' }) => {
 			<div>
 				<div>
 					<div class="row justify-center">
+						{build_mode === "entrenamiento" ? (
 						<div style={styles.greenBackground} class="card col-sm-12 col-md-3 shadowed">
 							<div class="section double-padded">
 								<h4 class="card-header">ENTRENAMIENTO PERSONAL</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-					
+
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
-												onClick={() => setEntrenamiento(radioUrls.entrenamiento.online)}
+												onClick={() => setEntrenamiento(radioUrls.entrenamiento.online.url)}
 												name="tipo"
 												type="radio"
 												id="online-entrenamiento"
@@ -131,7 +136,7 @@ const Header = ({ userId = '' }) => {
 												type="radio"
 												id="domicilio-entrenamiento"
 												autocomplete="off"
-												onClick={() => setEntrenamiento(radioUrls.entrenamiento.domicilio)}
+												onClick={() => setEntrenamiento(radioUrls.entrenamiento.domicilio.url)}
 											/>
 											<label
 												class="card-label"
@@ -161,18 +166,18 @@ const Header = ({ userId = '' }) => {
 									</button>
 								</div>
 							</div>
-						</div>
+						</div>) : (
 						<div style={styles.greenBackground} class="card col-sm-12 col-md-3 shadowed">
 							<div class="section double-padded">
 								<h4 class="card-header">CONSULTA DE NUTRICIÓN</h4>
 							</div>
 							<div class="section double-padded">
 								<div class="flex flex-column">
-							
+
 									<div class="bottom-double-padded">
 										<div class="flex align-center">
 											<input
-												onClick={() => setNutricion(radioUrls.nutricion.online)}
+												onClick={() => setNutricion(radioUrls.nutricion.online.url)}
 												name="nutricion"
 												type="radio"
 												id="online-nutricion"
@@ -184,7 +189,7 @@ const Header = ({ userId = '' }) => {
 										</div>
 										<div class="flex align-center">
 											<input
-												onClick={() => setNutricion(radioUrls.nutricion.presencial)}
+												onClick={() => setNutricion(radioUrls.nutricion.presencial.url)}
 												name="nutricion"
 												type="radio"
 												id="presencial-nutricion"
@@ -196,7 +201,7 @@ const Header = ({ userId = '' }) => {
 										</div>
 										<div class="flex align-center">
 											<input
-												onClick={() => setNutricion(radioUrls.nutricion.domicilio)}
+												onClick={() => setNutricion(radioUrls.nutricion.domicilio.url)}
 												name="nutricion"
 												type="radio"
 												id="domicilio-nutricion"
@@ -226,7 +231,7 @@ const Header = ({ userId = '' }) => {
 									</button>
 								</div>
 							</div>
-						</div>
+						</div>) }
 					</div>
 				</div>
 			</div>

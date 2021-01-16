@@ -154,3 +154,14 @@ button.rounded {
     flex-basis: 25%;
   }
 }
+
+body {
+  background: rgb(168,248,0);
+  background: linear-gradient(45deg, rgba(168,248,0,1) 0%, rgba(19,105,102,1) 36%, rgba(99,20,132,1) 64%, rgba(193,6,255,1) 100%);
+  height: auto !important;
+}
+
+.site-header {
+  background-color: transparent;
+}
+  
