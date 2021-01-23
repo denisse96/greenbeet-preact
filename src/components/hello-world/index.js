@@ -13,8 +13,26 @@ export default class App extends Component {
 
 const getUserData = async (_, { id }) => {
   const url = `https://greenbeet.vercel.app/api/user/${id}`;
-  const userdata = await Axios.post(url);
+  const userdata = await Axios.get(url);
   return userdata.data;
+};
+
+/**
+ * @param {object} data
+ * @param {string} data.id
+ * @param {string} data.event
+ * @param {string} data.event_type
+ */
+const updateUserLinks = async ({ id, event, event_type }) => {
+	const url = `https://greenbeet.vercel.app/api/user/eventScheduled`;
+	console.log({id, event, event_type})
+  const data = {
+    userShopifyId: String(id),
+		event,
+		event_type
+  };
+
+  await Axios.post(url, data);
 };
 
 function isCalendlyEvent(e) {
@@ -52,7 +70,7 @@ const Header = ({ userId = "" }) => {
       .includes("nutricion")
   ) {
     build_mode = "nutricion";
-  }
+	}
 
   const { data = {}, refetch } = useQuery(
     [
@@ -77,15 +95,6 @@ const Header = ({ userId = "" }) => {
       domicilio: { url: "", sesiones: 0 },
     },
   };
-  console.log(radioUrls);
-
-  const [creditos_entrenamiento, creditos_nutricion] = urls.reduce(
-    (acc, curr) => [
-      acc[0] + curr.sesiones_restantes_entrenamiento,
-      acc[1] + curr.sesiones_restantes_nutricion,
-    ],
-    [0, 0]
-  );
 
   urls.forEach((urlObject) => {
     if (
@@ -110,16 +119,6 @@ const Header = ({ userId = "" }) => {
 
   useEffect(() => {
     const host = window.location.origin || "";
-    function handleCalendlyMessage(e) {
-      if (isCalendlyEvent(e)) {
-        const { event, payload } = e.data;
-        if (event !== "calendly.event_scheduled") return;
-
-        console.log({ payload });
-      }
-    }
-
-    window.addEventListener("message", handleCalendlyMessage);
 
     function handleMessage(event) {
       if (event.origin !== host || !userId) return;
@@ -132,9 +131,31 @@ const Header = ({ userId = "" }) => {
 
     return () => {
       bc.close();
-      window.removeEventListener("message", handleCalendlyMessage);
     };
-  }, []);
+	}, []);
+	
+	useEffect(() => {
+		async function handleCalendlyMessage(e) {
+      if (isCalendlyEvent(e)) {
+				const { event, payload } = e.data;
+				console.log(nutricion, entrenamiento)
+				if (event !== "calendly.event_scheduled") return;
+
+        await updateUserLinks({
+					event: build_mode === "nutricion" ? nutricion : entrenamiento,
+					event_type: build_mode,
+					id: String(id)
+				});
+        await refetch();
+      }
+    }
+
+		window.addEventListener("message", handleCalendlyMessage);
+		
+		return () => {
+			window.removeEventListener("message", handleCalendlyMessage);
+		}
+	}, [nutricion, entrenamiento]);
 
   return (
     <div>
