@@ -67,7 +67,7 @@ const Header = ({ userId = "" }) => {
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .includes("nutricion")
+      .includes("nutri")
   ) {
     build_mode = "nutricion";
 	}
@@ -102,7 +102,8 @@ const Header = ({ userId = "" }) => {
       urlObject.localizacion //&&
       //	!radioUrls.entrenamiento[urlObject.localizacion]
     ) {
-      radioUrls.entrenamiento[urlObject.localizacion].url = urlObject.url;
+      const links = urlObject.url.split(", ");
+      radioUrls.entrenamiento[urlObject.localizacion].url = links[0];
       radioUrls.entrenamiento[urlObject.localizacion].sesiones +=
         urlObject.sesiones_restantes_entrenamiento;
     }
@@ -111,7 +112,8 @@ const Header = ({ userId = "" }) => {
       urlObject.localizacion // &&
       //!radioUrls.nutricion[urlObject.localizacion]
     ) {
-      radioUrls.nutricion[urlObject.localizacion].url = urlObject.url;
+      const links = urlObject.url.split(", ");
+      radioUrls.nutricion[urlObject.localizacion].url = links[0];
       radioUrls.nutricion[urlObject.localizacion].sesiones +=
         urlObject.sesiones_restantes_nutricion;
     }
@@ -133,7 +135,7 @@ const Header = ({ userId = "" }) => {
       bc.close();
     };
 	}, []);
-	
+
 	useEffect(() => {
 		async function handleCalendlyMessage(e) {
       if (isCalendlyEvent(e)) {
@@ -151,7 +153,7 @@ const Header = ({ userId = "" }) => {
     }
 
 		window.addEventListener("message", handleCalendlyMessage);
-		
+
 		return () => {
 			window.removeEventListener("message", handleCalendlyMessage);
 		}
@@ -221,7 +223,7 @@ const Header = ({ userId = "" }) => {
                       onClick={() => {
                         entrenamiento
                           ? calendlyClick(entrenamiento)
-                          : tabOpen("https://greenbeet.mx/collections");
+                          : tabOpen("https://greenbeet.mx/collections/entrenamiento-personal/products/entrenamiento-personal-domicilio");
                       }}
                     >
                       {entrenamiento ? (
@@ -312,7 +314,7 @@ const Header = ({ userId = "" }) => {
                       onClick={() => {
                         nutricion
                           ? calendlyClick(nutricion)
-                          : tabOpen("https://greenbeet.mx/collections");
+                          : tabOpen("https://greenbeet.mx/collections/nutricion/products/consulta-de-nutricion-1ra-vez");
                       }}
                       class="rounded align-self-start"
                     >
