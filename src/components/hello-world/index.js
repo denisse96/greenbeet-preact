@@ -50,11 +50,25 @@ const styles = {
   label: { fontStyle: "normal", fontWeight: "normal" },
 };
 
+const appointmentsEnums = {
+  nutricion: {
+    online: "nutricion-online", 
+    domicilio : "nutricion-domicilio " ,  
+    presencial: "nutricion-presencial"
+  },
+  entrenamiento: {
+    online: "entrenamiento-online",
+    domicilio: "entrenamiento-domicilio",
+    presencial: "entrenamiento-presencial",
+  }
+}
+
 const Header = ({ userId = "" }) => {
   const calendlyClick = (url) => openPopupWidget({ url });
   const tabOpen = (url) => window.open(url, "_blank");
   const [nutricion, setNutricion] = useState("");
   const [entrenamiento, setEntrenamiento] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
   let id =
     userId ||
     (window.ShopifyAnalytics && window.ShopifyAnalytics.meta.page.customerId);
@@ -177,9 +191,8 @@ const Header = ({ userId = "" }) => {
                     <div class="bottom-double-padded">
                       <div class="flex align-center">
                         <input
-                          onClick={() =>
-                            setEntrenamiento(radioUrls.entrenamiento.online.url)
-                          }
+                          onClick={() => setSelectedOption(appointmentsEnums.entrenamiento.online)}
+                          checked={selectedOption === appointmentsEnums.entrenamiento.online}
                           name="tipo"
                           type="radio"
                           id="online-entrenamiento"
@@ -200,11 +213,8 @@ const Header = ({ userId = "" }) => {
                           type="radio"
                           id="domicilio-entrenamiento"
                           autocomplete="off"
-                          onClick={() =>
-                            setEntrenamiento(
-                              radioUrls.entrenamiento.domicilio.url
-                            )
-                          }
+                          onClick={() => setSelectedOption(appointmentsEnums.entrenamiento.online)}
+                          checked={selectedOption === appointmentsEnums.entrenamiento.online}
                         />
                         <label
                           class="card-label"
@@ -252,9 +262,8 @@ const Header = ({ userId = "" }) => {
                     <div class="bottom-double-padded">
                       <div class="flex align-center">
                         <input
-                          onClick={() =>
-                            setNutricion(radioUrls.nutricion.online.url)
-                          }
+                          onClick={() => setSelectedOption(appointmentsEnums.nutricion.online)}
+                          checked={selectedOption === appointmentsEnums.nutricion.online}
                           name="nutricion"
                           type="radio"
                           id="online-nutricion"
@@ -271,9 +280,8 @@ const Header = ({ userId = "" }) => {
                       </div>
                       <div class="flex align-center">
                         <input
-                          onClick={() =>
-                            setNutricion(radioUrls.nutricion.presencial.url)
-                          }
+                          onClick={() => setSelectedOption(appointmentsEnums.nutricion.presencial)}
+                          checked={selectedOption === appointmentsEnums.nutricion.presencial}
                           name="nutricion"
                           type="radio"
                           id="presencial-nutricion"
@@ -291,9 +299,8 @@ const Header = ({ userId = "" }) => {
                       </div>
                       <div class="flex align-center">
                         <input
-                          onClick={() =>
-                            setNutricion(radioUrls.nutricion.domicilio.url)
-                          }
+                          onClick={() => setSelectedOption(appointmentsEnums.nutricion.domicilio)}
+                          checked={selectedOption === appointmentsEnums.nutricion.domicilio}
                           name="nutricion"
                           type="radio"
                           id="domicilio-nutricion"
