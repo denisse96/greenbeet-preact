@@ -66,8 +66,6 @@ const appointmentsEnums = {
 const Header = ({ userId = "" }) => {
   const calendlyClick = (url) => openPopupWidget({ url });
   const tabOpen = (url) => window.open(url, "_blank");
-  const [nutricion, setNutricion] = useState("");
-  const [entrenamiento, setEntrenamiento] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   let id =
     userId ||
@@ -133,6 +131,28 @@ const Header = ({ userId = "" }) => {
     }
   });
 
+  let url = "";
+
+  if(build_mode === "nutricion") {
+    if(selectedOption === appointmentsEnums.nutricion.online) {
+      url = radioUrls.nutricion.online.url;
+    } else if (selectedOption === appointmentsEnums.nutricion.presencial) {
+      url = radioUrls.nutricion.presencial.url;
+    } else if (selectedOption === appointmentsEnums.nutricion.domicilio) {
+      url = radioUrls.nutricion.domicilio.url;
+    }
+  } else {
+    if(selectedOption === appointmentsEnums.entrenamiento.online) {
+      url = radioUrls.entrenamiento.online.url;
+    } else if (selectedOption === appointmentsEnums.entrenamiento.presencial) {
+      url = radioUrls.entrenamiento.presencial.url;
+    } else if (selectedOption === appointmentsEnums.entrenamiento.domicilio) {
+      url = radioUrls.entrenamiento.domicilio.url;
+    }
+  }
+
+  let hasSelectedUrl = !!url;
+
   useEffect(() => {
     const host = window.location.origin || "";
 
@@ -154,11 +174,10 @@ const Header = ({ userId = "" }) => {
 		async function handleCalendlyMessage(e) {
       if (isCalendlyEvent(e)) {
 				const { event, payload } = e.data;
-				console.log(nutricion, entrenamiento)
 				if (event !== "calendly.event_scheduled") return;
 
         await updateUserLinks({
-					event: build_mode === "nutricion" ? nutricion : entrenamiento,
+					event: url,
 					event_type: build_mode,
 					id: String(id)
 				});
@@ -171,7 +190,7 @@ const Header = ({ userId = "" }) => {
 		return () => {
 			window.removeEventListener("message", handleCalendlyMessage);
 		}
-	}, [nutricion, entrenamiento]);
+	}, [url]);
 
   return (
     <div>
@@ -213,8 +232,8 @@ const Header = ({ userId = "" }) => {
                           type="radio"
                           id="domicilio-entrenamiento"
                           autocomplete="off"
-                          onClick={() => setSelectedOption(appointmentsEnums.entrenamiento.online)}
-                          checked={selectedOption === appointmentsEnums.entrenamiento.online}
+                          onClick={() => setSelectedOption(appointmentsEnums.entrenamiento.domicilio)}
+                          checked={selectedOption === appointmentsEnums.entrenamiento.domicilio}
                         />
                         <label
                           class="card-label"
@@ -231,12 +250,12 @@ const Header = ({ userId = "" }) => {
                       class="rounded align-self-start"
                       style={styles.button}
                       onClick={() => {
-                        entrenamiento
-                          ? calendlyClick(entrenamiento)
+                        hasSelectedUrl
+                          ? calendlyClick(url)
                           : tabOpen("https://greenbeet.mx/collections/entrenamiento-personal/products/entrenamiento-personal-domicilio");
                       }}
                     >
-                      {entrenamiento ? (
+                      {hasSelectedUrl ? (
                         "Agendar Cita"
                       ) : (
                         <div>
@@ -319,13 +338,13 @@ const Header = ({ userId = "" }) => {
                     <button
                       style={styles.button}
                       onClick={() => {
-                        nutricion
-                          ? calendlyClick(nutricion)
+                        hasSelectedUrl
+                          ? calendlyClick(url)
                           : tabOpen("https://greenbeet.mx/collections/nutricion/products/consulta-de-nutricion-1ra-vez");
                       }}
                       class="rounded align-self-start"
                     >
-                      {nutricion ? (
+                      {hasSelectedUrl ? (
                         "AGENDAR CITA"
                       ) : (
                         <div>
