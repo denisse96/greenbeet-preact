@@ -1,17 +1,18 @@
-html, body {
-	font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
+html,
+body {
+	font: 14px/1.21 "Helvetica Neue", arial, sans-serif;
 	font-weight: 400;
 }
 
 :root {
 	--universal-margin: 0.5rem;
-  --universal-padding: 0.5rem;
-  --universal-border-radius: 0.125rem;
+	--universal-padding: 0.5rem;
+	--universal-border-radius: 0.125rem;
 
-  --generic-border-color: rgba(0, 0, 0, 0.3);
-  --generic-box-shadow: 0 0.5rem 0.25rem 0 rgba(0, 0, 0, 0.25),
+	--generic-border-color: rgba(0, 0, 0, 0.3);
+	--generic-box-shadow: 0 0.5rem 0.25rem 0 rgba(0, 0, 0, 0.25),
 		0 0.25rem 0.25rem -0.25rem rgba(0, 0, 0, 0.5);
-		
+
 	--card-back-color: #136966;
 	--card-fore-color: #111;
 	--card-border-color: #ddd;
@@ -22,8 +23,13 @@ h1 {
 }
 
 .gradient-button {
-	background: rgb(171,255,50);
-	background: linear-gradient(90deg, rgba(171,255,50,1) 0%, rgba(54,86,130,1) 49%, rgba(192,40,251,1) 100%);
+	background: rgb(171, 255, 50);
+	background: linear-gradient(
+		90deg,
+		rgba(171, 255, 50, 1) 0%,
+		rgba(54, 86, 130, 1) 49%,
+		rgba(192, 40, 251, 1) 100%
+	);
 }
 
 button[disabled] {
@@ -31,137 +37,179 @@ button[disabled] {
 }
 
 .shadowed {
-  box-shadow: var(--generic-box-shadow) !important;
+	box-shadow: var(--generic-box-shadow) !important;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-self: center;
-  position: relative;
-  width: 100%;
-  background: var(--card-back-color);
-  color: var(--card-fore-color);
-  border-radius: var(--universal-border-radius);
-  margin: var(--universal-margin);
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-self: center;
+	position: relative;
+	width: 100%;
+	background: var(--card-back-color);
+	color: var(--card-fore-color);
+	border-radius: var(--universal-border-radius);
+	margin: var(--universal-margin);
+	overflow: hidden;
 }
 
 .card > .section {
-  background: var(--card-back-color);
-  color: var(--card-fore-color);
-  box-sizing: border-box;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  padding: var(--universal-padding);
-  width: 100%;
-  color: white;
+	background: var(--card-back-color);
+	color: var(--card-fore-color);
+	box-sizing: border-box;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	padding: var(--universal-padding);
+	width: 100%;
+	color: white;
 }
 
 .bottom-double-padded {
-  padding-bottom: calc(1.5 * var(--universal-padding));
+	padding-bottom: calc(1.5 * var(--universal-padding));
 }
 
 .section.double-padded {
-  padding: calc(1.5 * var(--universal-padding));
+	padding: calc(1.5 * var(--universal-padding));
 }
 
 .container {
-  margin: 0 auto;
-  padding: 0 calc(1.5 * var(--universal-padding));
+	margin: 0 auto;
+	padding: 0 calc(1.5 * var(--universal-padding));
 }
 .row {
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 1 auto;
-  flex-flow: row wrap;
+	box-sizing: border-box;
+	display: flex;
+	flex: 0 1 auto;
+	flex-flow: row wrap;
 }
 .col-sm,
 [class^="col-sm-"],
 [class^="col-sm-offset-"],
 .row[class*="cols-sm-"] > * {
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  padding: 0 calc(var(--universal-padding) / 2);
+	box-sizing: border-box;
+	flex: 0 0 auto;
+	padding: 0 calc(var(--universal-padding) / 2);
 }
 
 .col-sm-3,
 .row.cols-sm-3 > * {
-  max-width: 25%;
-  flex-basis: 25%;
+	max-width: 25%;
+	flex-basis: 25%;
 }
 
 .col-sm-12,
 .row.cols-sm-12 > * {
-  max-width: 100%;
-  flex-basis: 100%;
+	max-width: 100%;
+	flex-basis: 100%;
 }
 
 .card-label {
-  padding: calc(var(--universal-padding) / 2) var(--universal-padding);
+	padding: calc(var(--universal-padding) / 2) var(--universal-padding);
 }
 
 .flex-column {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .flex {
-  display: flex;
+	display: flex;
 }
 
 .align-center {
-  align-items: center;
+	align-items: center;
 }
 
 .justify-center {
-  justify-content: center;
+	justify-content: center;
 }
 
 .align-self-start {
-  align-self: start;
+	align-self: start;
 }
 
 button.rounded {
-  border-radius: 5rem !important;
-  padding: 0.5em 1em;
-} 
+	border-radius: 5rem !important;
+	padding: 0.5em 1em;
+}
 
 .color-white {
-  color: white;
+	color: white;
 }
 
-.card-header.card-header { 
-  color: white ; 
-  text-transform: none; 
-  margin-bottom: 0;
+.card-header.card-header {
+	color: white;
+	text-transform: none;
+	margin-bottom: 0;
 }
 
-@media screen and (min-width: 768px) { 
-  .col-md,
-  [class^="col-md-"],
-  [class^="col-md-offset-"],
-  .row[class*="cols-md-"] > * {
-    box-sizing: border-box;
-    flex: 0 0 auto;
-    padding: 0 calc(var(--universal-padding) / 2);
-  }
+@media screen and (min-width: 768px) {
+	.col-md,
+	[class^="col-md-"],
+	[class^="col-md-offset-"],
+	.row[class*="cols-md-"] > * {
+		box-sizing: border-box;
+		flex: 0 0 auto;
+		padding: 0 calc(var(--universal-padding) / 2);
+	}
 
-  .col-md-3,
-  .row.cols-md-3 > * {
-    max-width: 25%;
-    flex-basis: 25%;
-  }
+	.col-md-3,
+	.row.cols-md-3 > * {
+		max-width: 25%;
+		flex-basis: 25%;
+	}
 }
 
 body {
-  background: rgb(168,248,0);
-  background: linear-gradient(45deg, rgba(168,248,0,1) 0%, rgba(19,105,102,1) 36%, rgba(99,20,132,1) 64%, rgba(193,6,255,1) 100%);
-  height: auto !important;
+	background: rgb(168, 248, 0);
+	background: linear-gradient(
+		45deg,
+		rgba(168, 248, 0, 1) 0%,
+		rgba(19, 105, 102, 1) 36%,
+		rgba(99, 20, 132, 1) 64%,
+		rgba(193, 6, 255, 1) 100%
+	);
+	height: auto !important;
 }
 
 .site-header {
-  background-color: transparent;
+	background-color: transparent;
 }
-  
+
+.lds-ring {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+	align-self: center;
+}
+.lds-ring div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border: 8px solid #fff;
+	border-radius: 50%;
+	animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
