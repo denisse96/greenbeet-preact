@@ -84,7 +84,7 @@ const Header = ({ userId = "" }) => {
 		build_mode = "nutricion";
 	}
 
-	const { data = {}, refetch, isLoading } = useQuery(
+	const { data = {}, refetch, isLoading, isFetching } = useQuery(
 		[
 			"user.data",
 			{
@@ -109,16 +109,16 @@ const Header = ({ userId = "" }) => {
 	};
 
 	urls.forEach((urlObject) => {
-		if (
-			urlObject.sesiones_restantes_entrenamiento > 0 &&
-			urlObject.localizacion
-		) {
+		if (!urlObject.localizacion) return;
+
+		if (urlObject.sesiones_restantes_entrenamiento > 0) {
 			const links = urlObject.url.split(", ");
 			radioUrls.entrenamiento[urlObject.localizacion].url = links[0];
 			radioUrls.entrenamiento[urlObject.localizacion].sesiones +=
 				urlObject.sesiones_restantes_entrenamiento;
 		}
-		if (urlObject.sesiones_restantes_nutricion > 0 && urlObject.localizacion) {
+
+		if (urlObject.sesiones_restantes_nutricion > 0) {
 			const links = urlObject.url.split(", ");
 			radioUrls.nutricion[urlObject.localizacion].url = links[0];
 			radioUrls.nutricion[urlObject.localizacion].sesiones +=
@@ -166,7 +166,9 @@ const Header = ({ userId = "" }) => {
 	}, []);
 
 	useEffect(() => {
+		const copiedUrl = `${url}`;
 		async function handleCalendlyMessage(e) {
+			const url = `${copiedUrl}`;
 			if (isCalendlyEvent(e)) {
 				console.info("Calendly event", e);
 				console.info("Called with url", url);
@@ -182,14 +184,15 @@ const Header = ({ userId = "" }) => {
 			}
 		}
 
-		console.log("UseEffect asignado con url", url);
+		console.log("UseEffect asignado con url", copiedUrl);
 
 		window.addEventListener("message", handleCalendlyMessage);
 
 		return () => {
 			window.removeEventListener("message", handleCalendlyMessage);
 		};
-	}, [url]);
+	});
+	console.log("Current Url", { url });
 
 	return (
 		<div>
@@ -207,7 +210,7 @@ const Header = ({ userId = "" }) => {
 										: "CONSULTA DE NUTRICIÓN"}
 								</h4>
 							</div>
-							{isLoading ? (
+							{isLoading || isFetching ? (
 								<Loader />
 							) : (
 								<>
