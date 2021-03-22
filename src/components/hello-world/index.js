@@ -18,6 +18,7 @@ const getUserData = async (_, { id }) => {
 };
 
 /**
+ * Método que obtiene los links de AirTable según el usuario y el tipo de evento solicitados.
  * @param {object} data
  * @param {string} data.id
  * @param {string} data.event
@@ -25,7 +26,6 @@ const getUserData = async (_, { id }) => {
  */
 const updateUserLinks = async ({ id, event, event_type }) => {
 	const url = `https://greenbeet.vercel.app/api/user/eventScheduled`;
-	console.log({ id, event, event_type });
 	const data = {
 		userShopifyId: String(id),
 		event,
@@ -74,6 +74,7 @@ const Header = ({ userId = "" }) => {
 
 	let build_mode = "entrenamiento";
 
+	// Ugly stuff. Obtener el tipo de evento según el nombre de la colección.
 	if (
 		collection_title
 			.toLowerCase()
@@ -108,6 +109,7 @@ const Header = ({ userId = "" }) => {
 		},
 	};
 
+	// Obtener los links del usuario según el tipo de sesión. Esto construye un megaobjeto dentro de `radioUrls`.
 	urls.forEach((urlObject) => {
 		if (
 			urlObject.sesiones_restantes_entrenamiento > 0 &&
@@ -128,6 +130,7 @@ const Header = ({ userId = "" }) => {
 
 	let url = "";
 
+	// More ugly stuff. Obtener los links según la opción seleccionada.
 	if (build_mode === "nutricion") {
 		if (selectedOption === appointmentsEnums.nutricion.online) {
 			url = radioUrls.nutricion.online.url;
@@ -148,6 +151,7 @@ const Header = ({ userId = "" }) => {
 
 	let hasSelectedUrl = !!url;
 
+	// Actualizar los datos si se hace la compra de un producto.
 	useEffect(() => {
 		const host = window.location.origin || "";
 
@@ -165,11 +169,11 @@ const Header = ({ userId = "" }) => {
 		};
 	}, []);
 
+	// Listener que responde al evento de calendly disparado cuando un usuario 
+	// crea un appointment
 	useEffect(() => {
 		async function handleCalendlyMessage(e) {
 			if (isCalendlyEvent(e)) {
-				console.info("Calendly event", e);
-				console.info("Called with url", url);
 				const { event, payload } = e.data;
 				if (event !== "calendly.event_scheduled") return;
 
@@ -182,7 +186,6 @@ const Header = ({ userId = "" }) => {
 			}
 		}
 
-		console.log("UseEffect asignado con url", url);
 
 		window.addEventListener("message", handleCalendlyMessage);
 
