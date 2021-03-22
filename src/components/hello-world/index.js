@@ -85,7 +85,7 @@ const Header = ({ userId = "" }) => {
 		build_mode = "nutricion";
 	}
 
-	const { data = {}, refetch, isLoading } = useQuery(
+	const { data = {}, refetch, isLoading, isFetching } = useQuery(
 		[
 			"user.data",
 			{
@@ -111,16 +111,16 @@ const Header = ({ userId = "" }) => {
 
 	// Obtener los links del usuario según el tipo de sesión. Esto construye un megaobjeto dentro de `radioUrls`.
 	urls.forEach((urlObject) => {
-		if (
-			urlObject.sesiones_restantes_entrenamiento > 0 &&
-			urlObject.localizacion
-		) {
+		if (!urlObject.localizacion) return;
+
+		if (urlObject.sesiones_restantes_entrenamiento > 0) {
 			const links = urlObject.url.split(", ");
 			radioUrls.entrenamiento[urlObject.localizacion].url = links[0];
 			radioUrls.entrenamiento[urlObject.localizacion].sesiones +=
 				urlObject.sesiones_restantes_entrenamiento;
 		}
-		if (urlObject.sesiones_restantes_nutricion > 0 && urlObject.localizacion) {
+
+		if (urlObject.sesiones_restantes_nutricion > 0) {
 			const links = urlObject.url.split(", ");
 			radioUrls.nutricion[urlObject.localizacion].url = links[0];
 			radioUrls.nutricion[urlObject.localizacion].sesiones +=
@@ -172,7 +172,9 @@ const Header = ({ userId = "" }) => {
 	// Listener que responde al evento de calendly disparado cuando un usuario 
 	// crea un appointment
 	useEffect(() => {
+		const copiedUrl = `${url}`;
 		async function handleCalendlyMessage(e) {
+			const url = `${copiedUrl}`;
 			if (isCalendlyEvent(e)) {
 				const { event, payload } = e.data;
 				if (event !== "calendly.event_scheduled") return;
@@ -192,7 +194,8 @@ const Header = ({ userId = "" }) => {
 		return () => {
 			window.removeEventListener("message", handleCalendlyMessage);
 		};
-	}, [url]);
+	});
+	console.log("Current Url", { url });
 
 	return (
 		<div>
@@ -210,7 +213,7 @@ const Header = ({ userId = "" }) => {
 										: "CONSULTA DE NUTRICIÓN"}
 								</h4>
 							</div>
-							{isLoading ? (
+							{isLoading || isFetching ? (
 								<Loader />
 							) : (
 								<>
