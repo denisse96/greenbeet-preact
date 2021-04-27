@@ -3,6 +3,7 @@ import Axios from "axios";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { openPopupWidget } from "react-calendly";
 import { AlertDialog, AlertDialogLabel } from "@reach/alert-dialog";
+import "broadcastchannel-polyfill";
 import "@reach/dialog/styles.css";
 
 type UrlType = {
